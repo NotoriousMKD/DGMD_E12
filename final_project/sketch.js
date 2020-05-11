@@ -30,22 +30,10 @@ let plantList = {
 
 let gardenWidthSelect, gardenHeightSelect, gardenXFeet, gardenYfeet;
 let garden = [];
-// get locally stored data if it exists
-let localGardenData = localStorage.getItem('garden');
-if (localGardenData) {
-  localGardenData = localGardenData.split(',')
-} else {
-  localGardenData = []
-};
 
 function setup() {
   // create full screen canvas
   createCanvas(windowWidth, windowHeight);
-
-  localGardenData.forEach(function(plant) {
-    addToGarden(plant);
-  });
-
 
   // get the garden dimension data
   gardenWidthSelect = select("#gardenWidth");
@@ -53,14 +41,12 @@ function setup() {
   gardenXFeet = parseInt(gardenWidthSelect.value());
   gardenYFeet = parseInt(gardenHeightSelect.value());
 
-  // when the user chooses a plant, add it to the garden and add it to local storage
+  // when the user chooses a plant, add it to the garden
   select("#addPlantButton").mousePressed(function () {
     let plant = select("#selectPlant").value();
 
     if (plant) {
       addToGarden(plant);
-      localGardenData.push(plant);
-      localStorage.setItem('garden', localGardenData.toString());
     }
   });
 
@@ -142,6 +128,9 @@ function defaultUnit() {
 }
 
 function resizeGarden() {
+  gardenXFeet = parseInt(gardenWidthSelect.value())
+  gardenYFeet = parseInt(gardenHeightSelect.value())
+
   // reset the unit to the default
   unit = defaultUnit()
 
