@@ -1,98 +1,91 @@
 // Unit used to calculate garden size in pixels, relative to feet
-let unit = window.innerWidth * 0.085 // roughly 100px
+let unit = defaultUnit()
+
+let weight = 4
+let weightNess = weight * 1.5
 
 // Static object containing info about each plant's constraints
 let plantList = {
-  'arugula': { height: (unit/4), width: (unit/4), color: '#000' },
-  'beans, bush': { height: (unit/2), width: (unit/2), color: '#000' },
-  'beans, pole': { height: (unit/2), width: (unit/2), color: '#000' },
-  'brussels sprouts': { height: unit, width: unit, color: '#000' },
-  'cabbage': { height: unit, width: unit, color: '#000' },
-  'carrots': { height: (unit/4), width: (unit/4), color: '#000' },
-  'cauliflower': { height: unit, width: unit, color: '#000' },
-  'celery': { height: (unit/2), width: (unit/2), color: '#000' },
-  'cucumber': { height: (unit), width: (unit), color: '#000' },
-  'eggplant': { height: unit, width: unit, color: '#000' },
-  'garlic': { height: (unit/4), width: (unit/4), color: '#000' },
-  'kale': { height: (unit/2), width: (unit/2), color: '#000' },
-  'leeks': { height: (unit/6), width: (unit/6), color: '#000' },
-  'lettuce': { height: (unit/5), width: (unit/5), color: '#000' },
-  'onion': { height: (unit/9), width: (unit/9), color: '#000' },
-  'parsnip': { height: (unit/9), width: (unit/9), color: '#000' },
-  'pepper': { height: unit, width: unit, color: '#000' },
-  'spinach': { height: (unit/9), width: (unit/9), color: '#000' },
-  'squash': { height: unit, width: unit, color: 'yellow' },
-  'tomato': { height: unit, width: unit, color: 'red' }
-}
+  arugula: { height: (unit / 4 - weightNess), width: (unit / 4 - weightNess) },
+  beansBush: { height: (unit / 2 - weightNess), width: (unit / 2 - weightNess) },
+  beansPole: { height: (unit / 2 - weightNess), width: (unit / 2 - weightNess) },
+  brusselsSprouts: { height: (unit - weightNess), width: (unit - weightNess) },
+  cabbage: { height: (unit - weightNess), width: (unit - weightNess) },
+  carrots: { height: (unit / 4 - weightNess), width: (unit / 4 - weightNess) },
+  cauliflower: { height: (unit - weightNess), width: (unit - weightNess) },
+  celery: { height: (unit / 2 - weightNess), width: (unit / 2 - weightNess) },
+  cucumber: { height: (unit - weightNess), width: (unit - weightNess) },
+  eggplant: { height: (unit - weightNess), width: (unit - weightNess) },
+  garlic: { height: (unit / 4 - weightNess), width: (unit / 4 - weightNess) },
+  kale: { height: (unit / 2 - weightNess), width: (unit / 2 - weightNess) },
+  leeks: { height: (unit / 6 - weightNess), width: (unit / 6 - weightNess) },
+  lettuce: { height: (unit / 5 - weightNess), width: (unit / 5 - weightNess) },
+  onion: { height: (unit / 9 - weightNess), width: (unit / 9 - weightNess) },
+  parsnip: { height: (unit / 9 - weightNess), width: (unit / 9 - weightNess) },
+  pepper: { height: (unit - weightNess), width: (unit - weightNess) },
+  spinach: { height: (unit / 9 - weightNess), width: (unit / 9 - weightNess) },
+  squash: { height: (unit - weightNess), width: (unit - weightNess)},
+  tomato: { height: (unit - weightNess), width: (unit - weightNess)},
+};
 
-let gardenXSelect
-let gardenYSelect
 
-// Get this data from user input
-let plantSelections = [];
-
-// Create the garden based on plant selections
+let bgImage, gardenWidthSelect, gardenHeightSelect, gardenXFeet, gardenYfeet;
 let garden = [];
 
 function setup() {
+  // create full screen canvas
   createCanvas(windowWidth, windowHeight);
 
-  gardenXSelect = select('#gardenWidth')
-  gardenYSelect = select('#gardenHeight')
+  // get the garden dimension data
+  gardenWidthSelect = select("#gardenWidth");
+  gardenHeightSelect = select("#gardenHeight");
+  gardenXFeet = parseInt(gardenWidthSelect.value());
+  gardenYFeet = parseInt(gardenHeightSelect.value());
 
-  // add a button that will add plants to the holding area
-  let plantButton = select('#addPlantButton');
-  // plantButton.mousePressed(addPlant)
+  // when the user chooses a plant, add it to the garden
+  select("#addPlantButton").mousePressed(function () {
+    let plant = select("#selectPlant").value();
 
-  // select the select
-  let plantSelect = select('#selectPlant')
-  // when the user adds a plant, do stuff
-  plantButton.mousePressed(function (){
-    let selection = plantSelect.value()
+    if (plant) {
+      addToGarden(plant);
+    }
+  });
 
-    if (!selection) return
+  // change the size of the garden on page load and when new values are selected
+  resizeGarden();
+  gardenWidthSelect.changed(resizeGarden);
+  gardenHeightSelect.changed(resizeGarden);
 
-    plantSelections.push(selection)
-    plantTheGarden(selection)
-  })
-
-  resizeGarden()
-
-  // change the size of the garden if new values are selected
-  gardenXSelect.changed(resizeGarden)
-
-  // change the size of the garden if new values are selected
-  gardenYSelect.changed(resizeGarden)
+  bgImage = loadImage('./garden.jpg');
 }
 
-
 function draw() {
-  background(200);
+  background('#bfd1b8');
 
   // draw the garden area
-  strokeWeight(4);
+  strokeWeight(weight);
   stroke(51);
-  fill(255)
+  fill(255);
 
-  let gardenWidth = gardenXFeet * unit
-  let gardenHeight = gardenYFeet * unit
+  let gardenWidth = (gardenXFeet * unit) + (gardenXFeet * weight);
+  let gardenHeight = (gardenYFeet * unit) + (gardenYFeet * weight);
 
-  let gardenXStart = (windowWidth - gardenWidth) / 2
-  let gardenXEnd = gardenXStart + gardenWidth
+  let gardenXStart = (windowWidth - gardenWidth) / 2;
+  let gardenXEnd = gardenXStart + gardenWidth;
 
-  let gardenYStart = (windowHeight - gardenHeight) / 2
-  let gardenYEnd = gardenYStart + gardenHeight
+  let gardenYStart = (windowHeight - gardenHeight) / 2;
+  let gardenYEnd = gardenYStart + gardenHeight;
 
-  rect(gardenXStart, gardenYStart, gardenWidth, gardenHeight)
+  rect(gardenXStart, gardenYStart, gardenWidth, gardenHeight);
 
   // Draw vertical lines
-  for (let x = (gardenXStart + unit); x < gardenXEnd; x += unit) {
-    line(x, gardenYStart, x, gardenYEnd)
+  for (let x = gardenXStart + unit; x < gardenXEnd; x += (unit + (weight * 2))) {
+    line(x, gardenYStart, x, gardenYEnd);
   }
 
   // Draw horizontal lines
-  for (let y = (gardenYStart + unit); y < gardenYEnd; y += unit) {
-    line(gardenXStart, y, gardenXEnd, y)
+  for (let y = gardenYStart + unit; y < gardenYEnd; y += (unit + (weight * 2))) {
+    line(gardenXStart, y, gardenXEnd, y);
   }
 
   // methods from Draggable
@@ -100,56 +93,47 @@ function draw() {
     plant.over();
     plant.update();
     plant.show();
-  })
+  });
 }
 
 function mousePressed() {
   garden.forEach(function (plant) {
     plant.pressed();
-  })
+  });
 }
 
 function mouseReleased() {
   garden.forEach(function (plant) {
     plant.released();
-  })
+  });
 }
 
-// adding new plants chosen by user to the page
-function plantTheGarden(selection) {
+// add new plant chosen by user to the page
+function addToGarden(plant) {
+  let start = unit / 2;
+  let info = plantList[plant];
+  plant = new Draggable(start, start, info.width, info.height, plant);
 
-  // plantSelections.forEach(function (selection) {
-  //   plantInfo = plantList[selection]
-  //   plant = new Draggable(x, y, plantInfo.width, plantInfo.height, plantInfo.color)
-  //
-  //   garden.push(plant)
-  //
-  //   // x += 10
-  //   // y += 10
-  // })
-
-  let start = unit / 2
-
-  plantInfo = plantList[selection]
-  plant = new Draggable(start, start, plantInfo.width, plantInfo.height, plantInfo.color)
-
-  garden.push(plant)
-
-  // x += 10
-  // y += 10
+  garden.push(plant);
 }
 
 function windowResized() {
+  // when the window is resized, resize our canvas and garden with it
   resizeCanvas(windowWidth, windowHeight);
+  resizeGarden();
+}
+
+function defaultUnit() {
+  return window.innerWidth * 0.085 // roughly 100px at 1200px wide screen
 }
 
 function resizeGarden() {
-  gardenXFeet = parseInt(gardenXSelect.value()) 
-  gardenYFeet = parseInt(gardenYSelect.value())
+  // reset the unit to the default
+  unit = defaultUnit()
 
-  unit = window.innerWidth * 0.085
-  let gardenWontFit = unit * gardenYFeet > window.innerHeight
+  // Change the unit size if the garden wont fit vertically
+  let gardenWontFit = gardenYFeet * unit > window.innerHeight;
   if (gardenWontFit) {
-    unit = window.innerHeight / (gardenYFeet + 2)
+    unit = window.innerHeight / (gardenYFeet + 2);
   }
 }
