@@ -1,5 +1,5 @@
-// Click and Drag an object
-// Daniel Shiffman <http://www.shiffman.net>
+// The logic of this code came from "Click and Drag an object" written by Daniel Shiffman <http://www.shiffman.net>
+// I extended it in some ways for the purpose of my project
 
 class Draggable {
   constructor(x, y, w, h, plant) {
@@ -11,7 +11,7 @@ class Draggable {
     this.h = h;
     this.offsetX = 0;
     this.offsetY = 0;
-    this.plantImg = loadImage('icons/' + plant + '.svg');
+    this.plantImg = loadImage('icons/' + plant + '.svg'); //make the draggable object an image
   }
 
   over() {
@@ -42,7 +42,7 @@ class Draggable {
     } else {
       noFill();
     }
-    
+
     rect(this.x, this.y, this.w, this.h);
     image(this.plantImg, this.x, this.y, this.w, this.h)
   }

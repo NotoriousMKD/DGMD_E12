@@ -2,39 +2,50 @@
 let unit = defaultUnit()
 
 let weight = 4
-let weightNess = weight * 1.5
 
 // Static object containing info about each plant's constraints
 let plantList = {
-  arugula: { height: (unit / 4 - weightNess), width: (unit / 4 - weightNess) },
-  beansBush: { height: (unit / 2 - weightNess), width: (unit / 2 - weightNess) },
-  beansPole: { height: (unit / 2 - weightNess), width: (unit / 2 - weightNess) },
-  brusselsSprouts: { height: (unit - weightNess), width: (unit - weightNess) },
-  cabbage: { height: (unit - weightNess), width: (unit - weightNess) },
-  carrots: { height: (unit / 4 - weightNess), width: (unit / 4 - weightNess) },
-  cauliflower: { height: (unit - weightNess), width: (unit - weightNess) },
-  celery: { height: (unit / 2 - weightNess), width: (unit / 2 - weightNess) },
-  cucumber: { height: (unit - weightNess), width: (unit - weightNess) },
-  eggplant: { height: (unit - weightNess), width: (unit - weightNess) },
-  garlic: { height: (unit / 4 - weightNess), width: (unit / 4 - weightNess) },
-  kale: { height: (unit / 2 - weightNess), width: (unit / 2 - weightNess) },
-  leeks: { height: (unit / 6 - weightNess), width: (unit / 6 - weightNess) },
-  lettuce: { height: (unit / 5 - weightNess), width: (unit / 5 - weightNess) },
-  onion: { height: (unit / 9 - weightNess), width: (unit / 9 - weightNess) },
-  parsnip: { height: (unit / 9 - weightNess), width: (unit / 9 - weightNess) },
-  pepper: { height: (unit - weightNess), width: (unit - weightNess) },
-  spinach: { height: (unit / 9 - weightNess), width: (unit / 9 - weightNess) },
-  squash: { height: (unit - weightNess), width: (unit - weightNess)},
-  tomato: { height: (unit - weightNess), width: (unit - weightNess)},
+  arugula: { height: unit / 4, width: unit / 4 },
+  beansBush: { height: unit / 2, width: unit / 2 },
+  beansPole: { height: unit / 2, width: unit / 2 },
+  brusselsSprouts: { height: unit, width: unit },
+  cabbage: { height: unit, width: unit },
+  carrots: { height: unit / 4, width: unit / 4 },
+  cauliflower: { height: unit, width: unit },
+  celery: { height: unit / 2, width: unit / 2 },
+  cucumber: { height: unit, width: unit },
+  eggplant: { height: unit, width: unit },
+  garlic: { height: unit / 4, width: unit / 4 },
+  kale: { height: unit / 2, width: unit / 2 },
+  leeks: { height: unit / 6, width: unit / 6 },
+  lettuce: { height: unit / 5, width: unit / 5 },
+  onion: { height: unit / 9, width: unit / 9 },
+  parsnip: { height: unit / 9, width: unit / 9 },
+  pepper: { height: unit, width: unit },
+  spinach: { height: unit / 9, width: unit / 9 },
+  squash: { height: unit, width: unit},
+  tomato: { height: unit, width: unit},
 };
 
 
-let bgImage, gardenWidthSelect, gardenHeightSelect, gardenXFeet, gardenYfeet;
+let gardenWidthSelect, gardenHeightSelect, gardenXFeet, gardenYfeet;
 let garden = [];
+// get locally stored data if it exists
+let localGardenData = localStorage.getItem('garden');
+if (localGardenData) {
+  localGardenData = localGardenData.split(',')
+} else {
+  localGardenData = []
+};
 
 function setup() {
   // create full screen canvas
   createCanvas(windowWidth, windowHeight);
+
+  localGardenData.forEach(function(plant) {
+    addToGarden(plant);
+  });
+
 
   // get the garden dimension data
   gardenWidthSelect = select("#gardenWidth");
@@ -42,12 +53,14 @@ function setup() {
   gardenXFeet = parseInt(gardenWidthSelect.value());
   gardenYFeet = parseInt(gardenHeightSelect.value());
 
-  // when the user chooses a plant, add it to the garden
+  // when the user chooses a plant, add it to the garden and add it to local storage
   select("#addPlantButton").mousePressed(function () {
     let plant = select("#selectPlant").value();
 
     if (plant) {
       addToGarden(plant);
+      localGardenData.push(plant);
+      localStorage.setItem('garden', localGardenData.toString());
     }
   });
 
@@ -56,7 +69,6 @@ function setup() {
   gardenWidthSelect.changed(resizeGarden);
   gardenHeightSelect.changed(resizeGarden);
 
-  bgImage = loadImage('./garden.jpg');
 }
 
 function draw() {
@@ -76,15 +88,17 @@ function draw() {
   let gardenYStart = (windowHeight - gardenHeight) / 2;
   let gardenYEnd = gardenYStart + gardenHeight;
 
+  let step = weight + unit;
+
   rect(gardenXStart, gardenYStart, gardenWidth, gardenHeight);
 
   // Draw vertical lines
-  for (let x = gardenXStart + unit; x < gardenXEnd; x += (unit + (weight * 2))) {
+  for (let x = gardenXStart + step ; x < gardenXEnd; x += step) {
     line(x, gardenYStart, x, gardenYEnd);
   }
 
   // Draw horizontal lines
-  for (let y = gardenYStart + unit; y < gardenYEnd; y += (unit + (weight * 2))) {
+  for (let y = gardenYStart + step; y < gardenYEnd; y += step) {
     line(gardenXStart, y, gardenXEnd, y);
   }
 
@@ -112,7 +126,7 @@ function mouseReleased() {
 function addToGarden(plant) {
   let start = unit / 2;
   let info = plantList[plant];
-  plant = new Draggable(start, start, info.width, info.height, plant);
+  plant = new Draggable(start, start, info.width - weight/2, info.height - weight/2, plant);
 
   garden.push(plant);
 }
