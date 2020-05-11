@@ -137,6 +137,6 @@ function resizeGarden() {
   // Change the unit size if the garden wont fit vertically
   let gardenWontFit = gardenYFeet * unit > window.innerHeight;
   if (gardenWontFit) {
-    unit = window.innerHeight / (gardenYFeet + 2);
+    unit = window.innerHeight / (gardenYFeet + 3);
   }
 }
