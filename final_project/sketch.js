@@ -46,7 +46,7 @@ function draw() {
   let gardenXStart = (windowWidth - gardenWidth) / 2;
   let gardenXEnd = gardenXStart + gardenWidth;
 
-  let gardenYStart = (windowHeight - gardenHeight) / 2;
+  let gardenYStart = ((windowHeight - gardenHeight) / 2) + 50;
   let gardenYEnd = gardenYStart + gardenHeight;
 
   let step = weight + unit;

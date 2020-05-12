@@ -9,31 +9,31 @@
   <div class="controls">
 
     <!--add a select for the horizontal length of the garden bed-->
-    <label for="gardenWidth">Horizontal Length of Garden (feet)</label>
+    <label for="gardenWidth">Horizontal Garden Length</label>
     <select id="gardenWidth">
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-        <option>6</option>
-        <option>7</option>
-        <option selected>8</option>
-        <option>9</option>
-        <option>10</option>
+        <option value="2">2 feet</option>
+        <option value="3">3 feet</option>
+        <option value="4">4 feet</option>
+        <option value="5">5 feet</option>
+        <option value="6">6 feet</option>
+        <option value="7">7 feet</option>
+        <option value="8" selected>8 feet</option>
+        <option value="9">9 feet</option>
+        <option value="10">10 feet</option>
     </select>
 
     <!--add a select for the vertical length of the garden bed-->
-    <label for="gardenHeight">Vertical Length of Garden (feet)</label>
+    <label for="gardenHeight">Vertical Garden Length</label>
     <select id="gardenHeight">
-        <option>2</option>
-        <option>3</option>
-        <option selected>4</option>
-        <option>5</option>
-        <option>6</option>
-        <option>7</option>
-        <option>8</option>
-        <option>9</option>
-        <option>10</option>
+        <option value="2">2 feet</option>
+        <option value="3">3 feet</option>
+        <option value="4" selected>4 feet</option>
+        <option value="5">5 feet</option>
+        <option value="6">6 feet</option>
+        <option value="7">7 feet</option>
+        <option value="8">8 feet</option>
+        <option value="9">9 feet</option>
+        <option value="10">10 feet</option>
     </select>
 
     <!--add a select that lists the plant options-->
@@ -65,6 +65,23 @@
     <button id="addPlantButton">
           Add plant!
     </button>
+    <div class="writeUp">
+      <details>
+        <summary>View Project Write Up</summary>
+          <p>
+            I made this tool to help plan a garden in the style of <a href="https://squarefootgardening.org/">square foot gardening</a>. I wrote in my proposal about how I couldn’t find a tool like this when I was starting my garden for the first time last year, but while I was googling to find a list of recommended spacing of various plants for square foot gardening, I came across <a href="https://www.gardeners.com/on/demandware.store/Sites-Gardeners-Site/default/KGP-Design">a similar tool</a>. However, one thing that I dislike about that version is that if forces you to only put one type of plant in each square. When I was initially planning my tool, I thought that was also how I would design mine, but once I started working, I realized that I prefer more flexibility because in real life I sometimes split squares up between multiple types of plants, tuck basil plants in between tomato plants, etc. So, although the tool I built requires more clicking and dragging to populate the whole garden, it also provides more flexibility.
+          </p>
+          <p>
+            My approach to working on this project was to break it down into the essential bits first and make sure I could get those working as sort of an MVP or proof of concept, then to move on to filling in the gaps. I first tested dragging multiples “plants” (boxes the sizes of the spacing dimensions) on the page, and then looping through an array of fake data that was supposed to replicate user-inputted data to see if I could create all of the shapes I wanted from an array. I think the next thing I did was add the “plants” to the page via button click. After that, I was mostly over the biggest hump. There were a ton of little mistakes and challenges along the way, but one that sticks out is getting the vegetables to resize when the size of the garden is changed. Working with javascript classes is tricky. Also, I initially thought I would draw all of the veggies using p5, but that was an insane idea, so I used icons instead.
+          </p>
+          <p>
+            For future work, I would provide the option to bulk add, say, an entire square of 16 carrots as opposed to only giving the option of adding one carrot at a time (and so on for other wee vegetables). That would be easy to implement. More difficult work I would like to do is to store the position of the vegetables in local storage and keep them in the right places of the garden on re-size. I briefly attempted this and didn’t really make and forward progress while also managing to break almost everything, so I decided that didn’t need to be a part of this first pass. Another feature I would like to add is a trash can for unwanted veggies! 
+          </p>
+          <p>
+          Thanks for a really fun and enriching course! I am so pleased that I found this in the course catalog. If there is anything I can do as a student to highlight this class (aside from the course evaluation), please let me know! It was excellent in so many ways.
+          </p>
+      </details>
+    </div>
   </div>
 
   <script src="p5.js"></script>

@@ -13,7 +13,5 @@ List of Requirements
 Add instructions for how to use the garden
 Fix the sizing of the veggies
 
-We can detect when plants intersect with each other
-We can detect when plants intersect with a specific part of the canvas (trash can)
+
 Save work on refresh
-Objects can only be dragged within our canvas window
