@@ -3,6 +3,7 @@
 
 class Draggable {
   constructor(x, y, w, h, plant) {
+    this.plant = plant;
     this.dragging = false; // Is the object being dragged?
     this.rollover = false; // Is the mouse over the ellipse?
     this.x = x;

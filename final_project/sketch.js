@@ -3,31 +3,6 @@ let unit = defaultUnit()
 
 let weight = 4
 
-// Static object containing info about each plant's constraints
-let plantList = {
-  arugula: { height: unit / 4, width: unit / 4 },
-  beansBush: { height: unit / 2, width: unit / 2 },
-  beansPole: { height: unit / 2, width: unit / 2 },
-  brusselsSprouts: { height: unit, width: unit },
-  cabbage: { height: unit, width: unit },
-  carrots: { height: unit / 4, width: unit / 4 },
-  cauliflower: { height: unit, width: unit },
-  celery: { height: unit / 2, width: unit / 2 },
-  cucumber: { height: unit, width: unit },
-  eggplant: { height: unit, width: unit },
-  garlic: { height: unit / 4, width: unit / 4 },
-  kale: { height: unit / 2, width: unit / 2 },
-  leeks: { height: unit / 6, width: unit / 6 },
-  lettuce: { height: unit / 5, width: unit / 5 },
-  onion: { height: unit / 9, width: unit / 9 },
-  parsnip: { height: unit / 9, width: unit / 9 },
-  pepper: { height: unit, width: unit },
-  spinach: { height: unit / 9, width: unit / 9 },
-  squash: { height: unit, width: unit},
-  tomato: { height: unit, width: unit},
-};
-
-
 let gardenWidthSelect, gardenHeightSelect, gardenXFeet, gardenYfeet;
 let garden = [];
 
@@ -111,8 +86,8 @@ function mouseReleased() {
 // add new plant chosen by user to the page
 function addToGarden(plant) {
   let start = unit / 2;
-  let info = plantList[plant];
-  plant = new Draggable(start, start, info.width - weight/2, info.height - weight/2, plant);
+  let info = plantList()[plant];
+  plant = new Draggable(50, 200, info.width - weight/2, info.height - weight/2, plant);
 
   garden.push(plant);
 }
@@ -135,8 +110,40 @@ function resizeGarden() {
   unit = defaultUnit()
 
   // Change the unit size if the garden wont fit vertically
-  let gardenWontFit = gardenYFeet * unit > window.innerHeight;
+  let gardenWontFit = gardenYFeet * unit > window.innerHeight - 100;
   if (gardenWontFit) {
-    unit = window.innerHeight / (gardenYFeet + 3);
+    unit = (window.innerHeight - 200) / (gardenYFeet);
   }
+  garden.forEach(function(plant) {
+    let info = plantList()[plant.plant];
+    plant.w = info.width - weight/2
+    plant.h = info.height - weight/2
+  });
+
+}
+
+function plantList() {
+  let plantList = {
+    // object containing info about each plant's constraints
+    arugula: { height: unit / 4, width: unit / 4 },
+    beansBush: { height: unit / 2, width: unit / 2 },
+    beansPole: { height: unit / 2, width: unit / 2 },
+    brusselsSprouts: { height: unit, width: unit },
+    cabbage: { height: unit, width: unit },
+    carrots: { height: unit / 4, width: unit / 4 },
+    cauliflower: { height: unit, width: unit },
+    celery: { height: unit / 2, width: unit / 2 },
+    cucumber: { height: unit, width: unit },
+    eggplant: { height: unit, width: unit },
+    garlic: { height: unit / 2, width: unit / 2 },
+    kale: { height: unit / 2, width: unit / 2 },
+    leeks: { height: unit / 6, width: unit / 6 },
+    lettuce: { height: unit / 5, width: unit / 5 },
+    onion: { height: unit / 9, width: unit / 9 },
+    pepper: { height: unit, width: unit },
+    spinach: { height: unit / 9, width: unit / 9 },
+    squash: { height: unit, width: unit},
+    tomato: { height: unit, width: unit},
+  }
+  return plantList
 }
